@@ -10,40 +10,228 @@ Table of Contents:
         3.5 Footer
 ////////////////////////////////////////////////////////////////////////*/
 
-
+/*color: #899CA0;*/
+/*color: #1C2B32;*/
 
 /*////////////////////////
     1. Global Styles
 ////////////////////////*/
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap');
+
+
+* {
+    /* 1. Looks like we need text to align in the horizontal middle of the page for starters.*/
+    text-align: center;
+
+    /*We want all elements specified height and width to be sized in an intuitive way, so including margin and padding when defining total width of a box*/
+    /*Otherwise the parent  will dictate the size of the content-box if you use 100% width for example, causing overflow of remaining margin, border etc. https://www.joshwcomeau.com/css/custom-css-reset/#one-box-sizing-model-2*/
+    /*See: https://www.joshwcomeau.com/css/custom-css-reset/#one-box-sizing-model-2*/
+    box-sizing: border-box;
+
+    /* 2. Remove default margin. Apparently browsers could put extra default margin around an h1 element compared to smaller  headers for examples. */
+    We do not want margin-collapse. 😲 https://www.joshwcomeau.com/css/rules-of-margin-collapse/
+    margin: 0;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+body {
+
+    /* 3. Improve text rendering */
+    /*TLDR: Debatable, maar tegenwoordig zijn de pixels op een scherm vaak klein genoeg, zodat subpixel antialiasing niet nodig is.*/
+    /*Chrome en Safari doen afaik subpixel antialiasing by default, maar dit maakt de tekst er over het algemeen niet leesbaarder op.*/
+    /*Op mobiele toestellen werkt dat sub-pixel sowieso niet volgens mij en Google Fonts showcased de boel ook met -webkit-font-smoothing: antialiast. Aangezien we Google Fonts willen gebruiken kiezen we voor WYSIWYG*/
+
+    -webkit-font-smoothing: antialiased;
+
+
+}
+
+body * {
+
+    /* 4. Voeg een toegankelijke line-height toe */
+    /* Mijn vriendin is dyslectisch en voor haar is een line-height van 1.5 "een must" om de leesbaarheid te verbeteren.
+       Zie ook: https://www.w3.org/WAI/WCAG21/Understanding/text-spacing.html voor meer context over de aanbevolen richtlijnen voor tekstspatiëring. */
+
+    /* Ik wil echter voorkomen dat grotere teksten onnodig veel witruimte krijgen, daarom gebruik ik calc() om een meer
+       dynamische line-height te bepalen die afhankelijk is van het huidige lettertype en zijn grootte. */
+
+    /* De onderstaande oplossing gebruikt 2px aan vaste ruimte boven en onder de tekstregel voor consistentie,
+       terwijl 2ex zorgt voor een aanpasbare kernhoogte die afhankelijk is van de grootte van het huidige lettertype.
+       'ex' is gebaseerd op de hoogte van de letter 'x' in het huidige lettertype, net zoals 'em' voor de font-size gebruikt wordt.
+       Zie: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Values_and_Units#dimensions en
+       https://kittygiraudel.com/2020/05/18/using-calc-to-figure-out-optimal-line-height/ voor meer details. */
+
+    /* Dit experiment is niet geschikt voor productiepagina's met veel dynamische of potentieel overlappende tekst,
+       aangezien de resulterende line-height lastig voorspelbaar kan zijn en visuele inconsistenties kan veroorzaken. */
+    line-height: calc(2px + 2ex + 2px);
+
+    /* We zouden ook de volgende benadering kunnen gebruiken om aanpassingen voor heading-elementen te elimineren,
+       maar ik wil eerst beter begrijpen hoe calc() werkt met verschillende eenheden voordat ik verder ga:
+
+       * {
+           line-height: calc(1em + 0.5rem);
+       }
+       body {
+           line-height: 1.5;
+       }
+    */
+}
 
 
 /*////////////////////////
     2. Typography
 ////////////////////////*/
 
+/*5 Improve media defaults*/
+/*I don't want default font-styling in my inputs. Especially not when entering a domain name I would like to style. */
+/*Apparently your browser could zoom you in because of this. 🥸*/
+/*Let's start with base font properties (which the font property does for us) to confirm to the font stuff we chose in the first defining wrapper container (surrounding environment).  */
+
+input, button, textarea, select {
+
+    font: inherit;
+}
+
+/*6  Improve line wrapping*/
+/*This should improve line wrapping algorithm, so that a single word (in eg. review box) or a single emoji 🥹 gets isolated and wrapped onto a new line just by itself. */
+/*Might take a hit on performance, so will use it with care.*/
+p {
+    text-wrap: pretty
+}
 
 
 /*////////////////////////
     3. Areas
 ////////////////////////*/
 
+/*7. Improve media defaults*/
+/*TLDR: We don't want inline-spacing magic happening and <img> et al. behaves like an inline-block, even though it has a display value of inline.*/
+/*Check: https://www.w3schools.com/html/html_blocks.asp and https://www.w3schools.com/cssref/pr_class_display.php for differences in display values*/
+/*Check https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#styling_with_css why img can be sized as being inline-block by default*/
+
+/*I also set max-width: 100%. This is done to keep large images from overflowing, if they're placed in a container that isn't wide enough to contain them.*/
+/*Catch: Maybe we need overflow for the hero cover image, but we will check later.
+If we do use
+max-width: revert*/
+
+img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+}
 
 
 /*///////////// 3.1 Header /////////////*/
+header {
+    height: 35%;
+    position: relative;
 
+}
 
+.hero-wrapper {
+    max-width: 1000px;
+    border-style: dashed;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    margin: auto; /* Centreer het element horizontaal */
+    position: relative;
+    padding: 40px 20px; /* Extra ruimte om de inhoud goed zichtbaar te maken */
+    text-align: center; /* Zorg dat alles gecentreerd wordt */
+}
+
+.hero-image {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../assets/images/mountains.jpg");
+    background-size: cover; /* Vul de gehele container zonder vervorming */
+    background-repeat: no-repeat;
+    background-position: center 50%;
+    height: 100%;
+    width: auto;
+}
+
+/*Dit moet eigenlijk meer responsive en anders.*/
+
+.hero-text {
+    margin-bottom: 20px; /* Voeg ruimte toe onder de hero tekst voor het formulier */
+}
+
+.domain-form {
+    text-align: center; /* Centreer het formulier binnen de container */
+    display: inline-block; /* Formulier in de container centreren */
+    margin: 0 auto; /* Centreer het formulier */
+}
+
+/* Input styling */
+.domain-input {
+    padding: 10px 15px; /* Binnenruimte voor de input */
+    border: 2px solid #1C2B32; /* Grens rond het invoerveld */
+    border-right: none; /* Verwijder de grens aan de rechterkant om aan te sluiten op de button */
+    border-radius: 25px 0 0 25px; /* Alleen linker hoeken afronden */
+    outline: none; /* Verwijder de standaard focus outline */
+    display: inline-block; /* Houd het element inline zodat het naast de button komt */
+    vertical-align: middle; /* Zorg ervoor dat het input veld verticaal uitgelijnd is met de knop */
+}
+
+/* Normale placeholder styling */
+.domain-input::placeholder {
+    color: #999;  /* Lichtgrijze placeholder voor normale weergave */
+}
+
+/* Focus styling: placeholder vervagen */
+.domain-input:focus::placeholder {
+    color: transparent;  /* Maakt de placeholder onzichtbaar zodra het veld actief is */
+}
+
+/* Focus styling: veld zelf */
+.domain-input:focus {
+    border-color: #3C4B52;  /* Verander de kleur van de rand voor focus voor een duidelijke indicatie */
+    outline: none;  /* Verwijder het standaard randje van de browser bij focus */
+}
+
+/* Input styling */
+.domain-input {
+    padding: 10px 15px; /* Binnenruimte voor de input */
+    border: 2px solid #1C2B32; /* Grens rond het invoerveld */
+    border-right: 0; /* Verwijder de grens aan de rechterkant om aan te sluiten op de button */
+    border-radius: 25px 0 0 25px; /* Alleen linker hoeken afronden */
+    outline: none; /* Verwijder de standaard focus outline */
+    display: inline-block; /* Houd het element inline zodat het naast de button komt */
+    vertical-align: middle; /* Zorg ervoor dat het input veld verticaal uitgelijnd is met de knop */
+}
+
+/* Button styling */
+.domain-button {
+    padding: 10px 20px; /* Binnenruimte voor de knop */
+    border: 2px solid #1C2B32; /* Zelfde grens als de input om goed aan te sluiten */
+    border-left: 0; /* Verwijder de grens aan de linkerkant om aan te sluiten op de input, Hierdoor lijk je dus niet te hoeven werken met een negative margin!!!*/
+    background-color: #1C2B32; /* Donkere achtergrondkleur */
+    color: white; /* Witte tekstkleur voor contrast */
+    border-radius: 0 25px 25px 0; /* Alleen rechter hoeken afronden */
+    cursor: pointer; /* Verander cursor naar pointer voor interactie */
+    display: inline-block; /* Houd het element inline zodat het naast de input komt */
+    transition: background-color 0.3s ease; /* Zachte overgang voor hover effect */
+    vertical-align: middle; /* Zorg ervoor dat de knop verticaal uitgelijnd is met het invoerveld */
+}
+
+/* Om negatieve marges te vermijden, zorgen we dat de input en knop elkaar visueel raken */
+.domain-input, .domain-button {
+    margin: 0; /* Geen marge tussen deze elementen */
+}
 
 /*///////////// 3.2 Testimonial /////////////*/
-
 
 
 /*///////////// 3.3 Support /////////////*/
 
 
-
 /*///////////// 3.4 Faq /////////////*/
-
 
 
 /*///////////// 3.5 Footer /////////////*/
