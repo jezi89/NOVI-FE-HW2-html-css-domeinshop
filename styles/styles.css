@@ -23,7 +23,7 @@ Table of Contents:
 * {
     /* 1. Looks like we need text to align in the horizontal middle of the page for starters.*/
     /*Decided to leave it out and only apply it to .hero-text and ..domain-form*/
-    text-align: center;
+    /*text-align: center;*/
 
     /*We want all elements specified height and width to be sized in an intuitive way, so including margin and padding when defining total width of a box*/
     /*Otherwise the parent  will dictate the size of the content-box if you use 100% width for example, causing overflow of remaining margin, border etc. https://www.joshwcomeau.com/css/custom-css-reset/#one-box-sizing-model-2*/
@@ -41,7 +41,7 @@ body, html {
     font-family: "Poppins", sans-serif;
     font-weight: 300;
     font-style: normal;
-    color: #1C2B32;
+    color: black;
 }
 
 body {
@@ -50,8 +50,6 @@ body {
     /*TLDR: Debatable, maar tegenwoordig zijn de pixels op een scherm vaak klein genoeg, zodat subpixel antialiasing niet nodig is.*/
     /*Chrome en Safari doen afaik subpixel antialiasing by default, maar dit maakt de tekst er over het algemeen niet leesbaarder op.*/
     /*Op mobiele toestellen werkt dat sub-pixel sowieso niet volgens mij en Google Fonts showcased de boel ook met -webkit-font-smoothing: antialiast. Aangezien we Google Fonts willen gebruiken kiezen we voor WYSIWYG*/
-
-    -webkit-font-smoothing: antialiased;
 
 
 }
@@ -92,10 +90,27 @@ body * {
     2. Typography
 ////////////////////////*/
 
+
+h1 {
+    font-size: clamp(1.5rem, 5vw + 1rem, 10rem);
+    font-weight: 500;
+}
+
+h2 {
+    text-align: center;
+    margin: 2rem auto;
+    font-weight: 500;
+}
+
 a {
     /*Styled linkjes globaal*/
     color: #899CA0;
 
+}
+
+#register {
+    font-size: 16px;
+    text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.4); /* Lichte schaduw voor een zachte glow */
 }
 
 a:hover {
@@ -114,12 +129,6 @@ input, button, textarea, select {
     font: inherit;
 }
 
-/*Overwrite van de global text align voor alle elementen die na h2 komen in hierarchy.*/
-
-h2 ~ * {
-
-    text-align: left;
-}
 
 /*6  Improve line wrapping*/
 /*This should improve line wrapping algorithm, so that a single word (in eg. review box) or a single emoji 🥹 gets isolated and wrapped onto a new line just by itself. */
@@ -151,7 +160,7 @@ img, picture, video, canvas, svg {
 
 /*///////////// 3.1 Header /////////////*/
 header {
-    height: 600px;
+    height: 500px;
     position: relative;
 
 }
@@ -160,8 +169,8 @@ header {
     max-width: 1000px;
     height: 100%;
     margin: auto; /* Centreer het element horizontaal */
-    position: relative;
-
+    position: relative; /* Dit maakt absolute positionering binnen deze container mogelijk */
+    padding: 25px 20px; /* Extra ruimte om de inhoud goed zichtbaar te maken */
     text-align: center; /* Zorg dat alles gecentreerd wordt */
     z-index: 2; /* Zorg ervoor dat de wrapper boven de afbeelding staat */
 
@@ -169,25 +178,41 @@ header {
 
 .hero-image {
     content: "";
-    position: absolute;
+
     top: 0;
     left: 0;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../assets/images/mountains.jpg");
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1)), url("../assets/images/mountains.jpg");
     background-size: cover; /* Vul de gehele container zonder vervorming */
     background-repeat: no-repeat;
     background-position: center bottom; /* Houd de focus van de afbeelding onderin */
     height: 100%;
     position: relative;
-    min-height: 500px; /* Zorgt voor een minimumhoogte, vooral handig op brede schermen */
-    z-index: 1; /* Achtergrond overlay die ervoor zorgt dat tekst leesbaar blijft */
+    min-height: 500px; /* Zorgt voor een minimumhoogte, vooral handig op brede schermen. Hier moet eigenlijk een aparte hero image voor komen of grijskleuren aan de zijkant*/
+    z-index: 1; /* Achtergrond overlay die ervoor zorgt dat tekst leesbaar blijft. Weet niet zeker of dit nodig is, want lijkt nu niet veel uit te halen. */
 }
 
 /* Specifieke aanpassingen voor ultrabrede schermen */
 @media (min-width: 1920px) {
     .hero-image {
-        background-position: center 35%; /* Verschuift de focus van de afbeelding iets naar boven op ultrabrede schermen */
+        background-position: center 37%; /* Verschuift de focus van de afbeelding iets naar boven op ultrabrede schermen */
     }
 }
+
+/* Specifieke aanpassingen voor schermen tussen 800px en 1920px breed */
+@media (min-width: 800px) and (max-width: 1920px) {
+    .hero-image {
+        background-position: center 42%; /* Verplaats de afbeelding iets naar boven zodat de bomen zichtbaar blijven */
+    }
+}
+
+/* Aanpassingen voor kleinere schermen (landscape modus) */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero-image {
+        background-position: center top;
+        background-size: cover;
+    }
+}
+
 
 /*!* Aanpassingen voor kleinere schermen zoals tablets in landscape modus *!*/
 /*@media (max-width: 768px) and (orientation: landscape) {*/
@@ -199,9 +224,17 @@ header {
 
 /*Dit moet eigenlijk meer responsive en anders.*/
 
-.hero-text {
-    margin-bottom: 15px; /* Voeg ruimte toe onder de hero tekst voor het formulier */
+.hero-text h1 {
+    margin-bottom: 0; /* Zorgt ervoor dat er geen extra ruimte is tussen de titel en de tekst eronder */
 }
+
+.hero-text p {
+    margin-top: 5px; /* Pas deze waarde aan voor nauwkeurige positionering */
+    margin-bottom: 25px; /* Verlaag deze waarde als er teveel ruimte is naar de domain-form */
+    font-size: 16px;
+
+}
+
 
 .domain-form {
     text-align: center;
@@ -211,6 +244,7 @@ header {
     margin: 0 auto;
     font-size: 0;
 }
+
 
 /* Collapse whitespace: Met deze hack lijken we dus niet te hoeven werken met een negative margin!!!
    Alleen is het nog niet responsive, dus we moeten wel nog de buttons aanpassen vanaf een breakpoint bij kleinere schermen. */
@@ -255,6 +289,22 @@ header {
 
 }
 
+
+@media (max-width: 600px) {
+    .domain-form {
+        display: block;
+        text-align: center;
+    }
+
+    .domain-input, .domain-button {
+        display: block;
+        width: 90%; /* Zorg ervoor dat de input en button goed zichtbaar zijn, zelfs op kleinere schermen */
+        margin: 10px auto; /* Voeg ruimte toe rondom de elementen en centreer ze */
+        border-radius: 25px
+    }
+}
+
+
 /* Optioneel: Hover Effect voor Button */
 .domain-button:hover, .contact-button:hover {
     background-color: black; /* Geef een donkere achtergrond bij hover */
@@ -287,20 +337,69 @@ main {
 
 }
 
-/*///////////// 3.2 Testimonial /////////////*/
-.testimonial-container {
-    border: 2px solid #ccc;
-    background-color: #eee;
-    border-radius: 5px;
-    padding: 16px;
-    margin: 16px 0;
+/* Testimonials Styling */
+.testimonials {
+    text-align: center;
+    margin-bottom: 2rem;
 }
+
+
+/* Testimonial Container Styling */
+.testimonial-container {
+
+    background-color: white;
+    border-radius: 15px;
+    padding: 40px 80px; /* Meer padding voor extra witruimte boven en onder */
+    margin: 2rem; /* Meer ruimte boven en onder de testimonial */
+    text-align: left; /* Tekst links uitlijnen voor een natuurlijke weergave */
+    position: relative; /* Zorg dat schaduw werkt t.o.v. container */
+
+    box-shadow: -3px -3px 6px rgba(0, 0, 0, 0.05),
+    6px 6px 8px rgba(0, 0, 0, 0.15); /* Subtiele schaduw aan boven/links en meer aan onder/rechts */
+}
+
+/* Quote Icon Styling */
+.quote-icon {
+    width: 30px;
+    height: auto;
+    float: left; /* Zorgt dat het quote-icoon naast de tekst komt */
+    margin-right: 10px; /* Ruimte tussen quote-icoon en tekst */
+}
+
+/* Testimonial Content */
+.testimonial-content {
+    display: block;
+    overflow: hidden; /* Zorgt dat het floatende element wordt gecorrigeerd */
+    margin-bottom: 20px; /* Ruimte tussen tekst en avatar */
+}
+
+
+/* Avatar Styling */
+.avatar {
+    width: 40px; /* Kleinere avatar */
+    height: 40px;
+    border-radius: 50%; /* Rond de afbeelding af */
+    float: left; /* Avatar links van de tekst plaatsen */
+    margin-left: 40px;
+    margin-right: 15px; /* Voldoende ruimte tussen avatar en naam */
+}
+
+/* Testimonial Author Styling */
+.testimonial-author {
+    display: block;
+    margin-top: 30px;
+    text-align: left;
+    font-style: italic; /* Italic maken van naam en functie */
+
+    color: #333; /* Iets donkerder kleur voor contrast */
+}
+
 
 /*///////////// 3.3 Support /////////////*/
 
 .supportteam p {
     /*Overwrite van de global*/
-    font-size: 12px;
+    font-size: 14px;
 }
 
 #support-image {
@@ -317,7 +416,7 @@ main {
     background-color: #1C2B32;
     color: white;
     padding: 12px 12px;
-    font-size: 12px;
+    font-size: 13px;
     border-radius: 25px;
 
 }
