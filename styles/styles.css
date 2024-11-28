@@ -22,6 +22,7 @@ Table of Contents:
 
 * {
     /* 1. Looks like we need text to align in the horizontal middle of the page for starters.*/
+    /*Decided to leave it out and only apply it to .hero-text and ..domain-form*/
     text-align: center;
 
     /*We want all elements specified height and width to be sized in an intuitive way, so including margin and padding when defining total width of a box*/
@@ -150,7 +151,7 @@ img, picture, video, canvas, svg {
 
 /*///////////// 3.1 Header /////////////*/
 header {
-    height: 35%;
+    height: 600px;
     position: relative;
 
 }
@@ -160,42 +161,67 @@ header {
     height: 100%;
     margin: auto; /* Centreer het element horizontaal */
     position: relative;
-    padding: 25px 20px; /* Extra ruimte om de inhoud goed zichtbaar te maken */
+
     text-align: center; /* Zorg dat alles gecentreerd wordt */
+    z-index: 2; /* Zorg ervoor dat de wrapper boven de afbeelding staat */
+
 }
 
 .hero-image {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../assets/images/mountains.jpg");
     background-size: cover; /* Vul de gehele container zonder vervorming */
     background-repeat: no-repeat;
-    background-position: left 35%;
+    background-position: center bottom; /* Houd de focus van de afbeelding onderin */
     height: 100%;
-
+    position: relative;
+    min-height: 500px; /* Zorgt voor een minimumhoogte, vooral handig op brede schermen */
+    z-index: 1; /* Achtergrond overlay die ervoor zorgt dat tekst leesbaar blijft */
 }
+
+/* Specifieke aanpassingen voor ultrabrede schermen */
+@media (min-width: 1920px) {
+    .hero-image {
+        background-position: center 35%; /* Verschuift de focus van de afbeelding iets naar boven op ultrabrede schermen */
+    }
+}
+
+/*!* Aanpassingen voor kleinere schermen zoals tablets in landscape modus *!*/
+/*@media (max-width: 768px) and (orientation: landscape) {*/
+/*    .hero-image {*/
+/*        background-size: cover;*/
+/*        background-position: center top; !* Verplaats de focus naar boven om meer van de afbeelding zichtbaar te maken *!*/
+/*    }*/
+/*}*/
 
 /*Dit moet eigenlijk meer responsive en anders.*/
 
 .hero-text {
-    margin-bottom: 20px; /* Voeg ruimte toe onder de hero tekst voor het formulier */
+    margin-bottom: 15px; /* Voeg ruimte toe onder de hero tekst voor het formulier */
 }
 
 .domain-form {
-    text-align: center; /* Centreer het formulier binnen de container */
-    display: inline-block; /* Formulier in de container centreren */
-    margin: 0 auto; /* Centreer het formulier */
+    text-align: center;
+    display: inline-block;
+    align-items: center; /* Plaats de elementen in het midden van de container */
+    justify-content: center; /* Centreer de elementen horizontaal */
+    margin: 0 auto;
     font-size: 0;
-    /* Collapse whitespace: Met deze hack lijken we dus niet te hoeven werken met een negative margin!!!
-       Alleen is het nog niet responsive, dus we moeten wel nog de buttons aanpassen vanaf een breakpoint bij kleinere schermen. */
-    /*Als we kijken naar de root cause, dan is het probleem dat inline-block elements een standaard afstand hebben die bepaald wordt door de font-size.*/
-    /*We resetten de font-size weer in de volgende declaraties*/
-
-    /*  Er zijn zelfs nog twee andere mogelijkheden om de elementen naast elkaar te krijgen zonder flexbox:
-          Met float: left in de elementen  en overflow: hidden in de domain-form wrapper.
-      Of met good-old CSS Table Properties.
-      Zie: https://chatgpt.com/share/6747a522-972c-8010-bb70-da0b002959dc
-      */
-
 }
+
+/* Collapse whitespace: Met deze hack lijken we dus niet te hoeven werken met een negative margin!!!
+   Alleen is het nog niet responsive, dus we moeten wel nog de buttons aanpassen vanaf een breakpoint bij kleinere schermen. */
+/*Als we kijken naar de root cause, dan is het probleem dat inline-block elements een standaard afstand hebben die bepaald wordt door de font-size.*/
+/*We resetten de font-size weer in de volgende declaraties*/
+
+/*  Er zijn zelfs nog twee andere mogelijkheden om de elementen naast elkaar te krijgen zonder flexbox:
+      Met float: left in de elementen  en overflow: hidden in de domain-form wrapper.
+  Of met good-old CSS Table Properties.
+  Zie: https://chatgpt.com/share/6747a522-972c-8010-bb70-da0b002959dc
+  */
 
 
 .domain-input, .domain-button {
