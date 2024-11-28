@@ -30,7 +30,7 @@ Table of Contents:
     box-sizing: border-box;
 
     /* 2. Remove default margin. Apparently browsers could put extra default margin around an h1 element compared to smaller  headers for examples. */
-    We do not want margin-collapse. 😲 https://www.joshwcomeau.com/css/rules-of-margin-collapse/
+    /*We do not want margin-collapse. 😲 https://www.joshwcomeau.com/css/rules-of-margin-collapse/*/
     margin: 0;
 }
 
@@ -40,6 +40,7 @@ body, html {
     font-family: "Poppins", sans-serif;
     font-weight: 300;
     font-style: normal;
+    color: #1C2B32;
 }
 
 body {
@@ -90,6 +91,18 @@ body * {
     2. Typography
 ////////////////////////*/
 
+a {
+    /*Styled linkjes globaal*/
+    color: #899CA0;
+
+}
+
+a:hover {
+    /*Haalt de underline globaal weg bij hover over linkjes*/
+    text-decoration-line: none;
+}
+
+
 /*5 Improve media defaults*/
 /*I don't want default font-styling in my inputs. Especially not when entering a domain name I would like to style. */
 /*Apparently your browser could zoom you in because of this. 🥸*/
@@ -98,6 +111,13 @@ body * {
 input, button, textarea, select {
 
     font: inherit;
+}
+
+/*Overwrite van de global text align voor alle elementen die na h2 komen in hierarchy.*/
+
+h2 ~ * {
+
+    text-align: left;
 }
 
 /*6  Improve line wrapping*/
@@ -137,13 +157,10 @@ header {
 
 .hero-wrapper {
     max-width: 1000px;
-    border-style: dashed;
     height: 100%;
-    background-position: center;
-    background-size: cover;
     margin: auto; /* Centreer het element horizontaal */
     position: relative;
-    padding: 40px 20px; /* Extra ruimte om de inhoud goed zichtbaar te maken */
+    padding: 25px 20px; /* Extra ruimte om de inhoud goed zichtbaar te maken */
     text-align: center; /* Zorg dat alles gecentreerd wordt */
 }
 
@@ -151,9 +168,9 @@ header {
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../assets/images/mountains.jpg");
     background-size: cover; /* Vul de gehele container zonder vervorming */
     background-repeat: no-repeat;
-    background-position: center 50%;
+    background-position: left 35%;
     height: 100%;
-    width: auto;
+
 }
 
 /*Dit moet eigenlijk meer responsive en anders.*/
@@ -166,72 +183,142 @@ header {
     text-align: center; /* Centreer het formulier binnen de container */
     display: inline-block; /* Formulier in de container centreren */
     margin: 0 auto; /* Centreer het formulier */
+    font-size: 0;
+    /* Collapse whitespace: Met deze hack lijken we dus niet te hoeven werken met een negative margin!!!
+       Alleen is het nog niet responsive, dus we moeten wel nog de buttons aanpassen vanaf een breakpoint bij kleinere schermen. */
+    /*Als we kijken naar de root cause, dan is het probleem dat inline-block elements een standaard afstand hebben die bepaald wordt door de font-size.*/
+    /*We resetten de font-size weer in de volgende declaraties*/
+
+    /*  Er zijn zelfs nog twee andere mogelijkheden om de elementen naast elkaar te krijgen zonder flexbox:
+          Met float: left in de elementen  en overflow: hidden in de domain-form wrapper.
+      Of met good-old CSS Table Properties.
+      Zie: https://chatgpt.com/share/6747a522-972c-8010-bb70-da0b002959dc
+      */
+
+}
+
+
+.domain-input, .domain-button {
+    font-size: 16px; /* Reset font size */
+    display: inline-block; /* Houd het element inline zodat het naast de button komt */
+    vertical-align: middle; /* Zorg ervoor dat het input veld verticaal uitgelijnd is met de knop */
+    margin: 0;
+    line-height: normal; /* We fixen hier even de custom line height reset, die wel kan helpen bij leesbaarheid van de rest van mijn elementen, maar hier zorgt voor een te klein button */
 }
 
 /* Input styling */
 .domain-input {
     padding: 10px 15px; /* Binnenruimte voor de input */
     border: 2px solid #1C2B32; /* Grens rond het invoerveld */
-    border-right: none; /* Verwijder de grens aan de rechterkant om aan te sluiten op de button */
     border-radius: 25px 0 0 25px; /* Alleen linker hoeken afronden */
     outline: none; /* Verwijder de standaard focus outline */
-    display: inline-block; /* Houd het element inline zodat het naast de button komt */
-    vertical-align: middle; /* Zorg ervoor dat het input veld verticaal uitgelijnd is met de knop */
-}
+    background-color: transparent;
+    color: #ffffff; /* Stel een leesbare tekstkleur in */
 
-/* Normale placeholder styling */
-.domain-input::placeholder {
-    color: #999;  /* Lichtgrijze placeholder voor normale weergave */
-}
-
-/* Focus styling: placeholder vervagen */
-.domain-input:focus::placeholder {
-    color: transparent;  /* Maakt de placeholder onzichtbaar zodra het veld actief is */
-}
-
-/* Focus styling: veld zelf */
-.domain-input:focus {
-    border-color: #3C4B52;  /* Verander de kleur van de rand voor focus voor een duidelijke indicatie */
-    outline: none;  /* Verwijder het standaard randje van de browser bij focus */
-}
-
-/* Input styling */
-.domain-input {
-    padding: 10px 15px; /* Binnenruimte voor de input */
-    border: 2px solid #1C2B32; /* Grens rond het invoerveld */
-    border-right: 0; /* Verwijder de grens aan de rechterkant om aan te sluiten op de button */
-    border-radius: 25px 0 0 25px; /* Alleen linker hoeken afronden */
-    outline: none; /* Verwijder de standaard focus outline */
-    display: inline-block; /* Houd het element inline zodat het naast de button komt */
-    vertical-align: middle; /* Zorg ervoor dat het input veld verticaal uitgelijnd is met de knop */
 }
 
 /* Button styling */
 .domain-button {
     padding: 10px 20px; /* Binnenruimte voor de knop */
     border: 2px solid #1C2B32; /* Zelfde grens als de input om goed aan te sluiten */
-    border-left: 0; /* Verwijder de grens aan de linkerkant om aan te sluiten op de input, Hierdoor lijk je dus niet te hoeven werken met een negative margin!!!*/
+    border-left: none;
     background-color: #1C2B32; /* Donkere achtergrondkleur */
     color: white; /* Witte tekstkleur voor contrast */
     border-radius: 0 25px 25px 0; /* Alleen rechter hoeken afronden */
-    cursor: pointer; /* Verander cursor naar pointer voor interactie */
-    display: inline-block; /* Houd het element inline zodat het naast de input komt */
-    transition: background-color 0.3s ease; /* Zachte overgang voor hover effect */
-    vertical-align: middle; /* Zorg ervoor dat de knop verticaal uitgelijnd is met het invoerveld */
+
+
 }
 
-/* Om negatieve marges te vermijden, zorgen we dat de input en knop elkaar visueel raken */
-.domain-input, .domain-button {
-    margin: 0; /* Geen marge tussen deze elementen */
+/* Optioneel: Hover Effect voor Button */
+.domain-button:hover, .contact-button:hover {
+    background-color: black; /* Geef een donkere achtergrond bij hover */
+    color: #ffffff; /* Verander de tekstkleur naar wit voor contrast */
+    cursor: pointer;
+    transition: background-color 0.4s ease; /* Zachte overgang voor hover effect */
+}
+
+/* Normale placeholder styling */
+.domain-input::placeholder {
+    color: black; /* Lichtgrijze placeholder voor normale weergave */
+}
+
+/* Focus styling: placeholder vervagen */
+.domain-input:focus::placeholder {
+    color: transparent; /* Maakt de placeholder onzichtbaar zodra het veld actief is */
+
+}
+
+/* Focus styling: veld zelf */
+.domain-input:focus {
+    border-color: #3C4B52; /* Verander de kleur van de rand voor focus voor een duidelijke indicatie */
+    outline: none; /* Verwijder het standaard randje van de browser bij focus */
+    color: honeydew; /* Verander de tekstkleur naar honeydew voor contrast */
+}
+
+main {
+    max-width: 1000px;
+    margin: 3em auto 3em; /* Margin boven  */
+
 }
 
 /*///////////// 3.2 Testimonial /////////////*/
-
+.testimonial-container {
+    border: 2px solid #ccc;
+    background-color: #eee;
+    border-radius: 5px;
+    padding: 16px;
+    margin: 16px 0;
+}
 
 /*///////////// 3.3 Support /////////////*/
+
+.supportteam p {
+    /*Overwrite van de global*/
+    font-size: 12px;
+}
+
+#support-image {
+    /*max-width: 100%; niet nodig. Zie css reset nr. 7*/
+    height: auto; /* Houd de verhouding van de afbeelding consistent*/
+    border-radius: 10px;
+    margin: 3em auto 1em; /* Margin top & right+left & bottom */
+
+}
+
+.contact-button {
+    display: block;
+    margin: 1em 0;
+    background-color: #1C2B32;
+    color: white;
+    padding: 12px 12px;
+    font-size: 12px;
+    border-radius: 25px;
+
+}
 
 
 /*///////////// 3.4 Faq /////////////*/
 
+.faq summary {
+    text-align: left; /* Zorg ervoor dat de tekst in het summary element naar links uitgelijnd is */
+    cursor: pointer; /* Geef de gebruiker een visuele aanwijzing dat het klikbaar is */
+    font-weight: lighter; /* Optioneel: geef de tekst een opvallendere styling */
+    font-size: 14px;
+    margin: 0.5em auto;
+}
+
+.faq details {
+    text-align: left; /* Zorg ervoor dat de inhoud van details naar links uitgelijnd is */
+
+}
+
+.faq-text {
+    background-color: #899CA0;
+    border-radius: 10px;
+    margin: 1em auto;
+    text-align: left;
+    padding: 2em;
+    color: white;
+}
 
 /*///////////// 3.5 Footer /////////////*/
